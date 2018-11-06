@@ -24,12 +24,12 @@
 			<td>orresult</td>
 			<td>xorresult</td>
 		  </tr>
-		<% (1..tabsize).each do |thing| %>
+		<% (0..strings.length-1).each do |i|  %>
 		  <tr>
-		    <td><%= thing %> </td>
-			<td><%= thing %></td>
-			<td><%= thing %></td>
-			<td><%= thing %></td>
+		    <td><%= strings[i] %> </td>
+			<td><%= andres[i] %></td>
+			<td><%= orres[i] %></td>
+			<td><%= xorres[i] %></td>
 		  </tr>
 		<% end %>
 		</table>
