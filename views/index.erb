@@ -1,0 +1,38 @@
+<html>
+  <head></head>
+  <body>
+      <form>
+		<p> Truth Symbol:
+	    <input type = 'text' name = 'truthSym' />
+		</p>
+		<p> False symbol: 
+        <input type='text' name='falseSym' />
+		</p>
+		<p> Size (2 ^ x):  
+		<input type = 'text' name = 'size' />
+		</p>
+        <input type='submit' value='Generate Table' />
+      </form>
+	  
+	  <%if tabsize > 0 %>
+	    <p>True: <%= truthSym %></p>
+		<p>False: <%= falseSym %></p>
+		<table>		  
+		  <tr>
+		    <td>inString</td>
+			<td>andresult</td>
+			<td>orresult</td>
+			<td>xorresult</td>
+		  </tr>
+		<% (1..tabsize).each do |thing| %>
+		  <tr>
+		    <td><%= thing %> </td>
+			<td><%= thing %></td>
+			<td><%= thing %></td>
+			<td><%= thing %></td>
+		  </tr>
+		<% end %>
+		</table>
+      <%end%>
+  </body>
+</html>
