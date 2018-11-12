@@ -1,9 +1,6 @@
 require 'sinatra'
 require 'sinatra/reloader'
 
-# The secret number to guess.  This will start as an invalid value
-# Generate a secret number from 1 to 100
-
 
 def get_binary(numbits)
   arr = []
@@ -11,7 +8,7 @@ def get_binary(numbits)
   (0..maxnum-1).each do |i|
     arr.push(("%0"+numbits.to_s+"b")%i)
   end
-  arr
+  arr.reverse
 end
 
 def get_ands(arr,truthSym,falseSym)
@@ -44,7 +41,6 @@ def get_xors(arr,truthSym,falseSym)
   xorres = []
   for i in arr
     temp = i.gsub(/[0]/, '')
-	puts(temp)
 	  if((temp.length % 2) != 0)
 	    xorres.push(truthSym)
 	  else
@@ -54,30 +50,58 @@ def get_xors(arr,truthSym,falseSym)
   xorres
 end
 # If a GET request comes in at /, do the following.
-
 get '/' do
-  # Get the parameter named guess and store it in pg
+
+  # Get the parameters
   truthSym = params['truthSym']
   falseSym = params['falseSym']
   tabsize = params['size']
-  # Setting these variables here so that they are accessible
-  # outside the conditional
-  if (tabsize.nil?)
-	tabsize = -1
-  else
-    tabsize = tabsize.to_i
+  
+  error = false
+  strings = []
+  andres = []
+  orres = []
+  xorres = []
+ 
+  if (truthSym.nil? || truthSym == '')
+	truthSym = 'T'
+  end
+  if (falseSym.nil? || falseSym == '')
+	falseSym = 'F'
+  end
+  if (tabsize.nil? || tabsize == '')
+    tabsize = '3'
+  end
+
+  tabsize = tabsize.to_i
+  if tabsize <= 2
+	error = true
+  end
+
+  if (truthSym.length != 1)
+    error = true
   end
   
-  strings = get_binary(tabsize)
-  andres = get_ands(strings,truthSym,falseSym)
-  orres = get_ors(strings,truthSym,falseSym)
-  xorres = get_xors(strings,truthSym,falseSym)
-  # If there was no guess parameter, this is a brand new game.
-  # Generate a secret number and set the guess to nil.
-  erb :index, :locals => { truthSym:truthSym, falseSym:falseSym, tabsize:tabsize, strings:strings, andres:andres, orres:orres, xorres:xorres }
+  if (falseSym.length != 1)
+    error = true
+  end
+  
+  if(truthSym == falseSym)
+    error = true
+  end
+  
+  if error
+    erb :error
+  else
+    strings = get_binary(tabsize)
+    andres = get_ands(strings,truthSym,falseSym)
+    orres = get_ors(strings,truthSym,falseSym)
+    xorres = get_xors(strings,truthSym,falseSym)
+    erb :index, :locals => { truthSym:truthSym, falseSym:falseSym, tabsize:tabsize, strings:strings, andres:andres, orres:orres, xorres:xorres }
+  end
 end
 
 not_found do
   status 404
-  erb :error
+  erb :error404
 end

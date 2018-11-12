@@ -1,35 +1,40 @@
 <html>
   <head></head>
   <body>
+      <a href="/">Back to main</a>
       <form>
 		<p> Truth Symbol:
 	    <input type = 'text' name = 'truthSym' />
 		</p>
-		<p> False symbol: 
+		<p> False Symbol: 
         <input type='text' name='falseSym' />
 		</p>
 		<p> Size (2 ^ x):  
 		<input type = 'text' name = 'size' />
 		</p>
-        <input type='submit' value='Generate Table' />
+        <input type='submit' value='Show Truth Table' />
       </form>
 	  
 	  <%if tabsize > 0 %>
-	    <p>True: <%= truthSym %></p>
-		<p>False: <%= falseSym %></p>
+	    <p id = truth>True: <%= truthSym %></p>
+		<p id = false>False: <%= falseSym %></p>
 		<table>		  
-		  <tr>
-		    <td>inString</td>
-			<td>andresult</td>
-			<td>orresult</td>
-			<td>xorresult</td>
+		  <tr id = def>
+		    <%(0..tabsize-1).each do |j| %>
+			<td id = col<%=j%>> <%= tabsize-1-j %> </td>
+			<%end%>
+			<td id = col<%=tabsize%>>AND</td>
+			<td id = col<%=tabsize+1%>>OR </td>
+			<td id = col<%=tabsize+2%>>XOR</td>
 		  </tr>
 		<% (0..strings.length-1).each do |i|  %>
-		  <tr>
-		    <td><%= strings[i] %> </td>
-			<td><%= andres[i] %></td>
-			<td><%= orres[i] %></td>
-			<td><%= xorres[i] %></td>
+		  <tr id = <%=i%>>
+		  <% (0..strings[i].length-1).each do |k| %>
+		    <td id = cell<%=i%><%=k%>><%= strings[i][k] %> </td>
+			<%end%>
+			<td id = cell<%=i%><%=tabsize%>><%= andres[i] %></td>
+			<td id = cell<%=i%><%=tabsize+1%>><%= orres[i] %></td>
+			<td id = cell<%=i%><%=tabsize+2%>><%= xorres[i] %></td>
 		  </tr>
 		<% end %>
 		</table>
